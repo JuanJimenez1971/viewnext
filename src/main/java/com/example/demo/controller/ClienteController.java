@@ -32,7 +32,6 @@ public class ClienteController {
 	 * @param clientes
 	 * @return
 	 */
-
 	@PostMapping("agregar")
 	public ResponseEntity<?> addCollection(@RequestBody Collection<Cliente> clientes) {
 
@@ -44,14 +43,15 @@ public class ClienteController {
 	/**
 	 * Obtener la lista de clientes y exportarla a excel
 	 * 
-	 */
+	*/	
 	@GetMapping("exportar")
-	public void exporClientes() {
-
-		exporExcel(clienteService.getAll());
+	public  ResponseEntity<?> exporClientes() {
+		
+		Collection<Cliente> clientes = clienteService.getAll();
+		exporExcel(clientes);
+		return new ResponseEntity<>(clientes, HttpStatus.OK);
 
 	}
-
 	
 	/**
 	 * metodo privado que realiza la exportación a Excel de la lista de clientes recibida
@@ -67,13 +67,10 @@ public class ClienteController {
 
 		HSSFRow fila = hoja.createRow(contFila);
 
-		HSSFCell celda = fila.createCell(5);
-		
+		HSSFCell celda = fila.createCell(5);		
 		
 		HSSFRichTextString texto = new HSSFRichTextString("LISTADO DE CLIENTES");
 		celda.setCellValue(texto);		
-		
-		
 		
 		// Cabeceras
 		contFila = 3;
@@ -116,7 +113,6 @@ public class ClienteController {
 			// pasamos a la siguiente fila
 			contFila++;
 			fila = hoja.createRow(contFila);
-
 		}
 
 		try {
